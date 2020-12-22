@@ -3,10 +3,10 @@ import File from '../file.js';
 describe('PPT2PDF file model test', () => {
     it('It should generate the file model', () => {
         const file = File.create({
-            filePath: 'test/OPW 733 Tienduizend redenen.ppt'
+            filePath: 'test/OPW 733 Tienduizend redenen.pdf'
         });
 
-        expect(file.path).toBe('test/OPW 733 Tienduizend redenen.ppt');
+        expect(file.path).toBe('test/OPW 733 Tienduizend redenen.pdf');
     });
 
     it('It should throw an error if the pathpath doesnt exists', () => {

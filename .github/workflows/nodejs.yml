@@ -17,8 +17,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Install LibreOffice
-      run: sudo apt install ghostscript libreoffice
+    - name: Install imagemagick
+      run: sudo apt install imagemagick
     - name: npm install, build, and test
       run: |
         npm ci

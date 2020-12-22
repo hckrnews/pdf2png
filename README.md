@@ -7,7 +7,7 @@ If you want convert powerpoint files to png or jpg images, you can do it with th
 
 The package requires the following software to be installed:
 
-* LibreOffice
+* imagemagick
 
 ## Installation
 
@@ -15,7 +15,7 @@ The package requires the following software to be installed:
 
 Debian/Ubuntu:
 
-    sudo apt install libreoffice ghostscript
+    sudo apt install imagemagick
 
 ## Example usage
 

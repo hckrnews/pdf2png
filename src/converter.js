@@ -98,7 +98,7 @@ class Converter {
      */
     setFile(file) {
         if (!file || file.constructor !== String) {
-            throw new Error('Files should be a string');
+            throw new Error('File should be a string');
         }
 
         this.pdfFile = File.create({
@@ -148,7 +148,7 @@ class Converter {
      *
      * @return {array}
      */
-    convertPdftoPng() {
+    convertPdfToPng() {
         const fileName = getFileName(this.pdfFile.path);
         const output = execSync(this.getExecPath(this.pdfFile.path));
 

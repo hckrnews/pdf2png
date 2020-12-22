@@ -7,7 +7,7 @@ import {
 const expectTestCases = [
     {
         description:          'It should return true for the exists and fileExists',
-        input:                'test/OPW 733 Tienduizend redenen.ppt',
+        input:                'test/OPW 733 Tienduizend redenen.pdf',
         expectedExists:       true,
         expectedFolderExists: false,
         expectedFileExists:   true

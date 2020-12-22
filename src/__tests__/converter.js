@@ -6,44 +6,41 @@ import {
 describe('PPT2PDF converter test', () => {
     it('It should generate the converter', () => {
         const converter = Converter.create({
-            files:  ['test/OPW 733 Tienduizend redenen.ppt'],
+            file:   'test/OPW 733 Tienduizend redenen.pdf',
             output: 'output/'
         });
 
-        expect(converter.files[0].path).toBe('test/OPW 733 Tienduizend redenen.ppt');
-        expect(converter.files.length).toBe(1);
+        expect(converter.pdfFile.path).toBe('test/OPW 733 Tienduizend redenen.pdf');
     });
 
     it('It should generate the converter', () => {
         const converter = Converter.create({
-            files:  ['test/OPW 733 Tienduizend redenen.ppt'],
+            file:   'test/OPW 733 Tienduizend redenen.pdf',
             output: 'output/'
         });
 
-        const result = converter.convertPptToPdf();
+        converter.convertPdfToPng();
 
-        expect(result[0].pdf).toBe('output/OPW 733 Tienduizend redenen.pdf');
-        expect(fileExists('output/OPW 733 Tienduizend redenen.pdf')).toBe(true);
+        expect(fileExists('output/OPW 733 Tienduizend redenen-0.png')).toBe(true);
     });
 
     it('It should generate the converter', () => {
         const converter = Converter.create({
-            files:           ['test/OPW 733 Tienduizend redenen.ppt'],
+            file:            'test/OPW 733 Tienduizend redenen.pdf',
             output:          'output/',
-            customConverter: 'libreoffice --headless --convert-to pdf --outdir'
+            customConverter: 'convert'
         });
 
-        const result = converter.convertPptToPdf();
+        converter.convertPdfToPng();
 
-        expect(result[0].pdf).toBe('output/OPW 733 Tienduizend redenen.pdf');
-        expect(fileExists('output/OPW 733 Tienduizend redenen.pdf')).toBe(true);
+        expect(fileExists('output/OPW 733 Tienduizend redenen-0.png')).toBe(true);
     });
 
     it('It should return the default converter', () => {
         const converter = Converter.create({
-            files:           ['test/OPW 733 Tienduizend redenen.ppt'],
+            file:            'test/OPW 733 Tienduizend redenen.pdf',
             output:          'output/',
-            customConverter: 'libreoffice --headless --convert-to pdf --outdir'
+            customConverter: 'convert'
         });
 
         const result = converter.converter;
@@ -53,7 +50,7 @@ describe('PPT2PDF converter test', () => {
 
     it('It should return the custom converter', () => {
         const converter = Converter.create({
-            files:           ['test/OPW 733 Tienduizend redenen.ppt'],
+            file:            'test/OPW 733 Tienduizend redenen.pdf',
             output:          'output/',
             customConverter: 'example'
         });
@@ -63,18 +60,18 @@ describe('PPT2PDF converter test', () => {
         expect(result).toBe('example');
     });
 
-    it('It should throw an error if the files isnt an array', () => {
+    it('It should throw an error if the file isnt a string', () => {
         expect(() => {
             Converter.create({
-                files: 42
+                file: 42
             });
-        }).toThrowError('Files should be a array');
+        }).toThrowError('File should be a string');
     });
 
     it('It should throw an error if the output isnt a string', () => {
         expect(() => {
             Converter.create({
-                files:  ['test/OPW 733 Tienduizend redenen.ppt'],
+                file:   'test/OPW 733 Tienduizend redenen.pdf',
                 output: 42
             });
         }).toThrowError('Output should be a string');
@@ -83,7 +80,7 @@ describe('PPT2PDF converter test', () => {
     it('It should throw an error if the output folder doesnt exists', () => {
         expect(() => {
             Converter.create({
-                files:  ['test/OPW 733 Tienduizend redenen.ppt'],
+                file:   'test/OPW 733 Tienduizend redenen.pdf',
                 output: 'unknownfolder/'
             });
         }).toThrowError('Output folder doesnt exists');
@@ -92,7 +89,7 @@ describe('PPT2PDF converter test', () => {
     it('It should throw an error if the output folder doesnt exists', () => {
         expect(() => {
             Converter.create({
-                files:  ['test/OPW 733 Tienduizend redenen.ppt'],
+                file:   'test/OPW 733 Tienduizend redenen.pdf',
                 output: 'test/OPW 733 Tienduizend redenen.ppt'
             });
         }).toThrowError('Output folder doesnt exists');
@@ -101,7 +98,7 @@ describe('PPT2PDF converter test', () => {
     it('It should throw an error if the converter isnt a string', () => {
         expect(() => {
             Converter.create({
-                files:           ['test/OPW 733 Tienduizend redenen.ppt'],
+                file:            'test/OPW 733 Tienduizend redenen.pdf',
                 output:          'output/',
                 customConverter: 42
             });
