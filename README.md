@@ -21,10 +21,10 @@ Debian/Ubuntu:
 ## Example usage
 
 ```
-import Converter from '../src/converter.js';
+import Converter from '@hckrnews/pdf2png';
 
 const converter = Converter.create({
-    files:  ['test/OPW 733 Tienduizend redenen.pdf'],
+    file:   'test/OPW 733 Tienduizend redenen.pdf',
     output: 'output/'
 });
 

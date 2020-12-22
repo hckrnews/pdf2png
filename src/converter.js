@@ -4,11 +4,20 @@ import {
 import {
     Converter
 } from '@hckrnews/converter';
+import Options from './options.js';
 
 /**
  * Converter
  */
 class PdfToPngConverter extends Converter {
+    /**
+     * Define all convert options.
+     */
+    constructor() {
+        super();
+        this.convertString = '';
+    }
+
     /**
      * Get the converter.
      *
@@ -35,10 +44,15 @@ class PdfToPngConverter extends Converter {
     /**
      * Get the converter for Linux.
      *
+     * todo:
+     * resize (convertOptions.push('-resize ' + options.width + (options.height ? 'X' + options.height : ''));)
+     * background flatten
+     * strip (profile)
+     *
      * @return {string}
      */
     get converterForLinux() {
-        return 'convert -density 96 -quality 90 -colorspace RGB';
+        return `convert ${this.convertString} -colorspace RGB`;
     }
 
     /**
@@ -47,7 +61,7 @@ class PdfToPngConverter extends Converter {
      * @return {string}
      */
     get converterForMac() {
-        return 'convert -density 96 -quality 90 -colorspace RGB';
+        return `convert ${this.convertString} -colorspace RGB`;
     }
 
     /**
@@ -56,7 +70,7 @@ class PdfToPngConverter extends Converter {
      * @return {strring}
      */
     get converterForWindows() {
-        return 'magick.exe -density 96 -quality 90 -colorspace RGB';
+        return `magick.exe ${this.convertString} -colorspace RGB`;
     }
 
     /**
@@ -69,24 +83,49 @@ class PdfToPngConverter extends Converter {
     }
 
     /**
+     * Set the convert string.
+     *
+     * @param {string} convertString
+     */
+    setConvertString(convertString) {
+        if (!convertString) {
+            return;
+        }
+
+        if (convertString.constructor !== String) {
+            throw new Error('The convert string should be a string');
+        }
+
+        this.convertString = convertString;
+    }
+
+    /**
      * Create the converter
      *
      * @param {string} file
      * @param {string} output
      * @param {string} customConverter
+     * @param {number} density
+     * @param {number} quality
      *
      * @return {object}
      */
     static create({
         file,
         output,
-        customConverter
+        customConverter,
+        density,
+        quality
     }) {
         const converter = new PdfToPngConverter();
 
         converter.setFile(file);
         converter.setOutput(output);
         converter.setConverter(customConverter);
+        converter.setConvertString(Options.create({
+            density,
+            quality
+        }).convertString);
 
         return converter;
     }
