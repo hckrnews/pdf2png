@@ -70,7 +70,7 @@ class Converter {
      * @return {string}
      */
     get converterForLinux() {
-        return 'convert';
+        return 'convert -density 96 -quality 90 -colorspace RGB';
     }
 
     /**
@@ -79,7 +79,7 @@ class Converter {
      * @return {string}
      */
     get converterForMac() {
-        return 'convert';
+        return 'convert -density 96 -quality 90 -colorspace RGB';
     }
 
     /**
@@ -88,7 +88,7 @@ class Converter {
      * @return {strring}
      */
     get converterForWindows() {
-        return 'magick.exe';
+        return 'magick.exe -density 96 -quality 90 -colorspace RGB';
     }
 
     /**
@@ -150,6 +150,7 @@ class Converter {
      */
     convertPdfToPng() {
         const fileName = getFileName(this.pdfFile.path);
+
         const output = execSync(this.getExecPath(this.pdfFile.path));
 
         return {

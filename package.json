@@ -44,7 +44,7 @@
     "bugs": {
         "url": "https://github.com/hckrnews/pdf2png/issues"
     },
-    "license": "GPL-3.0",
+    "license": "MIT",
     "homepage": "https://github.com/hckrnews/pdf2png#readme",
     "scripts": {
         "build": "microbundle --target node",
