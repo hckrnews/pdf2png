@@ -28,7 +28,7 @@ describe('PPT2PDF converter test', () => {
         const converter = Converter.create({
             file:            'test/OPW 733 Tienduizend redenen.pdf',
             output:          'output/',
-            customConverter: 'convert'
+            customConverter: 'convert -density 96 -quality 90 -colorspace RGB'
         });
 
         converter.convertPdfToPng();
@@ -40,7 +40,7 @@ describe('PPT2PDF converter test', () => {
         const converter = Converter.create({
             file:            'test/OPW 733 Tienduizend redenen.pdf',
             output:          'output/',
-            customConverter: 'convert'
+            customConverter: 'convert -density 96 -quality 90 -colorspace RGB'
         });
 
         const result = converter.converter;
