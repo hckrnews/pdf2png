@@ -1,5 +1,5 @@
 # @hckrnews/ppt2pdf
-Convert ppt to pdf.
+Convert pdf to png or jpg.
 
 If you want convert powerpoint files to png or jpg images, you can do it with this script.
 
@@ -12,7 +12,7 @@ The package requires the following software to be installed:
 
 ## Installation
 
-    npm install @hckrnews/ppt2pdf
+    npm install @hckrnews/pdf2png
 
 Debian/Ubuntu:
 
@@ -24,11 +24,11 @@ Debian/Ubuntu:
 import Converter from '../src/converter.js';
 
 const converter = Converter.create({
-    files:  ['test/OPW 733 Tienduizend redenen.ppt'],
+    files:  ['test/OPW 733 Tienduizend redenen.pdf'],
     output: 'output/'
 });
 
-const result = converter.convertPptToPdf();
+const result = converter.convert();
 ```
 
 ## Props

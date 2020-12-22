@@ -1,29 +1,15 @@
-import File from './file.js';
-import {
-    folderExists,
-    getFileName
-} from './fs.js';
-import {
-    execSync
-} from 'child_process';
 import path from 'path';
 import {
     platform
 } from 'process';
+import {
+    Converter
+} from '@hckrnews/converter';
 
 /**
  * Converter
  */
-class Converter {
-    /**
-     * Define the files array
-     */
-    constructor() {
-        this.pdfFile = null;
-        this.output = null;
-        this.customConverter = null;
-    }
-
+class PdfToPngConverter extends Converter {
     /**
      * Get the converter.
      *
@@ -45,23 +31,6 @@ class Converter {
         }
 
         return converters.default;
-    }
-
-    /**
-     * Set the custom converter.
-     *
-     * @param {string} converter
-     */
-    setConverter(converter) {
-        if (!converter) {
-            return;
-        }
-
-        if (converter.constructor !== String) {
-            throw new Error('Converter should be a string');
-        }
-
-        this.customConverter = converter;
     }
 
     /**
@@ -92,47 +61,6 @@ class Converter {
     }
 
     /**
-     * Set the files
-     *
-     * @param {string} file
-     */
-    setFile(file) {
-        if (!file || file.constructor !== String) {
-            throw new Error('File should be a string');
-        }
-
-        this.pdfFile = File.create({
-            filePath: file
-        });
-    }
-
-    /**
-     * Set the output path
-     *
-     * @param {string} output
-     */
-    setOutput(output) {
-        if (!output || output.constructor !== String) {
-            throw new Error('Output should be a string');
-        }
-
-        if (!folderExists(output)) {
-            throw new Error('Output folder doesnt exists');
-        }
-
-        this.output = output;
-    }
-
-    /**
-     * Get the png file path.
-     *
-     * @return {string}
-     */
-    get pngFile() {
-        return this.output + path.parse(this.pdfFile.path).name + '.png';
-    }
-
-    /**
      * Get the exec path
      *
      * @param {string} filePath
@@ -144,20 +72,14 @@ class Converter {
     }
 
     /**
-     * Convert pdf files to png files.
+     * Get the path of the new file.
      *
-     * @return {array}
+     * @return {string}
      */
-    convertPdfToPng() {
-        const fileName = getFileName(this.pdfFile.path);
+    get newFile() {
+        const fileInfo = path.parse(this.oldFile.path);
 
-        const output = execSync(this.getExecPath(this.pdfFile.path));
-
-        return {
-            file: this.pdfFile,
-            fileName,
-            output
-        };
+        return this.output + fileInfo.name + '.png';
     }
 
     /**
@@ -174,7 +96,7 @@ class Converter {
         output,
         customConverter
     }) {
-        const converter = new Converter();
+        const converter = new PdfToPngConverter();
 
         converter.setFile(file);
         converter.setOutput(output);
@@ -184,4 +106,4 @@ class Converter {
     }
 }
 
-export default Converter;
+export default PdfToPngConverter;

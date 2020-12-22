@@ -1,7 +1,7 @@
 import Converter from '../converter.js';
 import {
     fileExists
-} from '../fs.js';
+} from '@hckrnews/converter';
 
 describe('PPT2PDF converter test', () => {
     it('It should generate the converter', () => {
@@ -10,7 +10,7 @@ describe('PPT2PDF converter test', () => {
             output: 'output/'
         });
 
-        expect(converter.pdfFile.path).toBe('test/OPW 733 Tienduizend redenen.pdf');
+        expect(converter.oldFile.path).toBe('test/OPW 733 Tienduizend redenen.pdf');
     });
 
     it('It should generate the converter', () => {
@@ -19,7 +19,7 @@ describe('PPT2PDF converter test', () => {
             output: 'output/'
         });
 
-        converter.convertPdfToPng();
+        converter.convert();
 
         expect(fileExists('output/OPW 733 Tienduizend redenen-0.png')).toBe(true);
     });
@@ -31,7 +31,7 @@ describe('PPT2PDF converter test', () => {
             customConverter: 'convert -density 96 -quality 90 -colorspace RGB'
         });
 
-        converter.convertPdfToPng();
+        converter.convert();
 
         expect(fileExists('output/OPW 733 Tienduizend redenen-0.png')).toBe(true);
     });
