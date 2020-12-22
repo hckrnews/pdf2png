@@ -1,4 +1,3 @@
-import path from 'path';
 import {
     platform
 } from 'process';
@@ -61,25 +60,12 @@ class PdfToPngConverter extends Converter {
     }
 
     /**
-     * Get the exec path
-     *
-     * @param {string} filePath
-     *
-     * @return {string}
-     */
-    getExecPath(filePath) {
-        return this.converter + ' "' + filePath + '" "' + this.pngFile + '"';
-    }
-
-    /**
      * Get the path of the new file.
      *
      * @return {string}
      */
     get newFile() {
-        const fileInfo = path.parse(this.oldFile.path);
-
-        return this.output + fileInfo.name + '.png';
+        return this.output + this.oldFile.name + '.png';
     }
 
     /**
