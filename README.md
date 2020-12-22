@@ -8,6 +8,7 @@ If you want convert powerpoint files to png or jpg images, you can do it with th
 The package requires the following software to be installed:
 
 * imagemagick
+* ghostscript
 
 ## Installation
 
@@ -15,7 +16,7 @@ The package requires the following software to be installed:
 
 Debian/Ubuntu:
 
-    sudo apt install imagemagick
+    sudo apt install imagemagick ghostscript
 
 ## Example usage
 

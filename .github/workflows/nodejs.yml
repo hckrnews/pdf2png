@@ -18,7 +18,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install imagemagick
-      run: sudo apt install imagemagick
+      run: sudo apt install imagemagick ghostscript
     - name: npm install, build, and test
       run: |
         npm ci
