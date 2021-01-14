@@ -15,7 +15,7 @@ class PdfToPngConverter extends Converter {
      */
     constructor() {
         super();
-        this.convertString = '';
+        this.options = null;
     }
 
     /**
@@ -39,6 +39,19 @@ class PdfToPngConverter extends Converter {
         }
 
         return converters.default;
+    }
+
+    /**
+     * Get the convert string;
+     *
+     * @return {string}
+     */
+    get convertString() {
+        if (!this.options) {
+            return '';
+        }
+
+        return this.options.convertString;
     }
 
     /**
@@ -85,18 +98,18 @@ class PdfToPngConverter extends Converter {
     /**
      * Set the convert string.
      *
-     * @param {string} convertString
+     * @param {object} options
      */
-    setConvertString(convertString) {
-        if (!convertString) {
+    setOptions(options) {
+        if (!options) {
             return;
         }
 
-        if (convertString.constructor !== String) {
-            throw new Error('The convert string should be a string');
+        if (!(options instanceof Options)) {
+            throw new Error('The options should be a options object');
         }
 
-        this.convertString = convertString;
+        this.options = options;
     }
 
     /**
@@ -105,8 +118,7 @@ class PdfToPngConverter extends Converter {
      * @param {string} file
      * @param {string} output
      * @param {string} customConverter
-     * @param {number} density
-     * @param {number} quality
+     * @param {object} options
      *
      * @return {object}
      */
@@ -114,21 +126,21 @@ class PdfToPngConverter extends Converter {
         file,
         output,
         customConverter,
-        density,
-        quality
+        options
     }) {
         const converter = new PdfToPngConverter();
 
         converter.setFile(file);
         converter.setOutput(output);
         converter.setConverter(customConverter);
-        converter.setConvertString(Options.create({
-            density,
-            quality
-        }).convertString);
+        converter.setOptions(options);
 
         return converter;
     }
 }
 
 export default PdfToPngConverter;
+export {
+    Options,
+    PdfToPngConverter
+};

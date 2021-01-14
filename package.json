@@ -1,9 +1,10 @@
 {
     "name": "@hckrnews/pdf2png",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "Convert pdf to images (png,jpg)",
     "files": [
         "src/converter.js",
+        "src/options.js",
         "dist/converter.js",
         "dist/converter.js.map",
         "dist/converter.module.js",
@@ -62,13 +63,13 @@
         "babel-jest": "^26.6.3",
         "codecov": "^3.8.1",
         "coveralls": "^3.1.0",
-        "eslint": "^7.15.0",
+        "eslint": "^7.17.0",
         "esm": "^3.2.25",
         "jest": "^26.6.3",
-        "microbundle": "^0.12.4"
+        "microbundle": "^0.13.0"
     },
     "dependencies": {
-        "@hckrnews/converter": "^0.3.0",
+        "@hckrnews/converter": "^0.4.0",
         "path": "^0.12.7"
     },
     "type": "module",

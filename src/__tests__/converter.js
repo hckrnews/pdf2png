@@ -47,7 +47,7 @@ describe('PPT2PDF converter test', () => {
 
         const result = converter.converter;
 
-        expect(result).toBe(converter.converterForLinux);
+        expect(result).toBe('convert  -quality 90 -density 96 -background "#FFFFFF" -colorspace RGB');
     });
 
     it('It should return the custom converter', () => {
@@ -105,65 +105,5 @@ describe('PPT2PDF converter test', () => {
                 customConverter: 42
             });
         }).toThrowError('Converter should be a string');
-    });
-
-    it('It should throw an error if the density isnt a number', () => {
-        expect(() => {
-            Converter.create({
-                file:    'test/OPW 733 Tienduizend redenen.pdf',
-                output:  'output/',
-                density: '1'
-            });
-        }).toThrowError('Density should be a valid density number');
-    });
-
-    it('It should throw an error if the density is 10 or more', () => {
-        expect(() => {
-            Converter.create({
-                file:    'test/OPW 733 Tienduizend redenen.pdf',
-                output:  'output/',
-                density: 9
-            });
-        }).toThrowError('Density should be a valid density number');
-    });
-
-    it('It should throw an error if the density is less than 1000', () => {
-        expect(() => {
-            Converter.create({
-                file:    'test/OPW 733 Tienduizend redenen.pdf',
-                output:  'output/',
-                density: 1001
-            });
-        }).toThrowError('Density should be a valid density number');
-    });
-
-    it('It should throw an error if the quality isnt a number', () => {
-        expect(() => {
-            Converter.create({
-                file:    'test/OPW 733 Tienduizend redenen.pdf',
-                output:  'output/',
-                quality: '1'
-            });
-        }).toThrowError('Quality should be a valid quality number');
-    });
-
-    it('It should throw an error if the quality is 1 or more', () => {
-        expect(() => {
-            Converter.create({
-                file:    'test/OPW 733 Tienduizend redenen.pdf',
-                output:  'output/',
-                quality: -1
-            });
-        }).toThrowError('Quality should be a valid quality number');
-    });
-
-    it('It should throw an error if the quality is less than 100', () => {
-        expect(() => {
-            Converter.create({
-                file:    'test/OPW 733 Tienduizend redenen.pdf',
-                output:  'output/',
-                quality: 101
-            });
-        }).toThrowError('Quality should be a valid quality number');
     });
 });
