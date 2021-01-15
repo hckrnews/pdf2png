@@ -1,6 +1,6 @@
 {
     "name": "@hckrnews/pdf2png",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "description": "Convert pdf to images (png,jpg)",
     "files": [
         "src/converter.js",
@@ -70,7 +70,7 @@
         "microbundle": "^0.12.4"
     },
     "dependencies": {
-        "@hckrnews/converter": "^0.3.0",
+        "@hckrnews/converter": "^0.4.1",
         "path": "^0.12.7"
     },
     "engines": {
