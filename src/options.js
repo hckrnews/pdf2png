@@ -223,7 +223,7 @@ class Options {
         options.setDensity(density);
         options.setQuality(quality);
         options.setWidth(width);
-        options.setWidth(height);
+        options.setHeight(height);
         options.setBackground(background);
 
         return options;
