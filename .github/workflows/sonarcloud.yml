@@ -1,0 +1,32 @@
+name: SonarCloud
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js 18
+      uses: actions/setup-node@v1
+      with:
+        node-version: 18
+        cache: 'npm'
+    - name: Install imagemagick
+      run: sudo apt install imagemagick ghostscript
+    - name: Change ImageMagick policy to allow pdf->png conversion.
+      run: sudo sed -i 's/^.*policy.*coder.*none.*PDF.*//' /etc/ImageMagick-6/policy.xml
+    - name: npm install, lint, and test
+      run: |
+        npm ci
+        npm run lint:report
+        npm test
+      env:
+        CI: true
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

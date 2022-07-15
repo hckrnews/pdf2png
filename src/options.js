@@ -1,4 +1,38 @@
 /**
+ * Check if char is hex.
+ *
+ * @param {string} char
+ *
+ * @return {boolean}
+ */
+function isHex(char) {
+    return (
+        char === '0' ||
+        char === '1' ||
+        char === '2' ||
+        char === '3' ||
+        char === '4' ||
+        char === '5' ||
+        char === '6' ||
+        char === '7' ||
+        char === '8' ||
+        char === '9' ||
+        char === 'a' ||
+        char === 'b' ||
+        char === 'c' ||
+        char === 'd' ||
+        char === 'e' ||
+        char === 'f' ||
+        char === 'A' ||
+        char === 'B' ||
+        char === 'C' ||
+        char === 'D' ||
+        char === 'E' ||
+        char === 'F'
+    );
+}
+
+/**
  * Process background color.
  *
  * @param {string} color
@@ -8,55 +42,25 @@
 function processBackgroundColor(color) {
     let newColor = color;
 
-    if (newColor.charAt(0) != '#') {
-        newColor = '#' + newColor;
+    if (newColor.charAt(0) !== '#') {
+        newColor = `#${newColor}`;
     }
 
-    if (newColor.length == 7) {
+    if (newColor.length === 7) {
         let validHex = true;
 
-        for (let i = 1; i < 7; i++) {
+        for (let i = 1; i < 7; i += 1) {
             if (!isHex(newColor.charAt(i))) {
                 validHex = false;
                 break;
             }
         }
         if (validHex) {
-            return '"' + newColor + '"';
+            return `"${newColor}"`;
         }
     }
-}
 
-/**
- * Check if char is hex.
- *
- * @param {string} char
- *
- * @return {boolean}
- */
-function isHex(char) {
-    return char == '0' ||
-        char == '1' ||
-        char == '2' ||
-        char == '3' ||
-        char == '4' ||
-        char == '5' ||
-        char == '6' ||
-        char == '7' ||
-        char == '8' ||
-        char == '9' ||
-        char == 'a' ||
-        char == 'b' ||
-        char == 'c' ||
-        char == 'd' ||
-        char == 'e' ||
-        char == 'f' ||
-        char == 'A' ||
-        char == 'B' ||
-        char == 'C' ||
-        char == 'D' ||
-        char == 'E' ||
-        char == 'F';
+    return undefined;
 }
 
 /**
@@ -69,8 +73,8 @@ class Options {
     constructor() {
         this.quality = 90;
         this.density = 96;
-        this.width;
-        this.height;
+        this.width = undefined;
+        this.height = undefined;
         this.background = '"#FFFFFF"';
     }
 
@@ -167,26 +171,26 @@ class Options {
     get options() {
         return [
             {
-                key:   'quality',
-                value: this.quality
+                key: 'quality',
+                value: this.quality,
             },
             {
-                key:   'density',
-                value: this.density
+                key: 'density',
+                value: this.density,
             },
             {
-                key:   'width',
-                value: this.width
+                key: 'width',
+                value: this.width,
             },
             {
-                key:   'height',
-                value: this.height
+                key: 'height',
+                value: this.height,
             },
             {
-                key:   'background',
-                value: this.background
-            }
-        ].filter(option => option.value);
+                key: 'background',
+                value: this.background,
+            },
+        ].filter((option) => option.value);
     }
 
     /**
@@ -196,7 +200,8 @@ class Options {
      */
     get convertString() {
         return this.options.reduce(
-            (accumulator, currentValue) => accumulator + ' -' + currentValue.key + ' ' + currentValue.value,
+            (accumulator, currentValue) =>
+                `${accumulator} -${currentValue.key} ${currentValue.value}`,
             ''
         );
     }
@@ -212,15 +217,13 @@ class Options {
      *
      * @return {object}
      */
-    static create({
-        density, quality, width, height, background
-    }) {
+    static create({ density, quality, width, height, background }) {
         const options = new Options();
 
         options.setDensity(density);
         options.setQuality(quality);
         options.setWidth(width);
-        options.setWidth(height);
+        options.setHeight(height);
         options.setBackground(background);
 
         return options;

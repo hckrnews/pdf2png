@@ -1,10 +1,12 @@
+import test from 'node:test';
+import assert from 'assert';
 import Converter from '../converter.js';
 import {
     fileExists
 } from '@hckrnews/converter';
 
-describe('PPT2PDF converter test', () => {
-    it('It should generate the converter', () => {
+test('PPT2PDF converter test', async (t) => {
+    await t.test('It should generate the converter', () => {
         const converter = Converter.create({
             file:    'test/OPW 733 Tienduizend redenen.pdf',
             output:  'output/',
@@ -12,10 +14,10 @@ describe('PPT2PDF converter test', () => {
             density: 72
         });
 
-        expect(converter.oldFile.path).toBe('test/OPW 733 Tienduizend redenen.pdf');
+        assert.strictEqual(converter.oldFile.path, 'test/OPW 733 Tienduizend redenen.pdf');
     });
 
-    it('It should generate the converter', () => {
+    await t.test('It should generate the converter', () => {
         const converter = Converter.create({
             file:   'test/OPW 733 Tienduizend redenen.pdf',
             output: 'output/'
@@ -23,10 +25,10 @@ describe('PPT2PDF converter test', () => {
 
         converter.convert();
 
-        expect(fileExists('output/OPW 733 Tienduizend redenen-0.png')).toBe(true);
+        assert.strictEqual(fileExists('output/OPW 733 Tienduizend redenen-0.png'), true);
     });
 
-    it('It should generate the converter', () => {
+    await t.test('It should generate the converter', () => {
         const converter = Converter.create({
             file:            'test/OPW 733 Tienduizend redenen.pdf',
             output:          'output/',
@@ -35,10 +37,10 @@ describe('PPT2PDF converter test', () => {
 
         converter.convert();
 
-        expect(fileExists('output/OPW 733 Tienduizend redenen-0.png')).toBe(true);
+        assert.strictEqual(fileExists('output/OPW 733 Tienduizend redenen-0.png'), true);
     });
 
-    it('It should return the default converter', () => {
+    await t.test('It should return the default converter', () => {
         const converter = Converter.create({
             file:            'test/OPW 733 Tienduizend redenen.pdf',
             output:          'output/',
@@ -47,10 +49,10 @@ describe('PPT2PDF converter test', () => {
 
         const result = converter.converter;
 
-        expect(result).toBe(converter.converterForLinux);
+        assert.strictEqual(result, converter.converterForLinux);
     });
 
-    it('It should return the custom converter', () => {
+    await t.test('It should return the custom converter', () => {
         const converter = Converter.create({
             file:            'test/OPW 733 Tienduizend redenen.pdf',
             output:          'output/',
@@ -59,111 +61,133 @@ describe('PPT2PDF converter test', () => {
 
         const result = converter.converter;
 
-        expect(result).toBe('example');
+        assert.strictEqual(result, 'example');
     });
 
-    it('It should throw an error if the file isnt a string', () => {
-        expect(() => {
+    await t.test('It should throw an error if the file isnt a string', () => {
+        try {
             Converter.create({
                 file: 42
             });
-        }).toThrowError('File should be a string');
+        } catch (error) {
+            assert.strictEqual(error.message, 'File should be a string');
+        }
     });
 
-    it('It should throw an error if the output isnt a string', () => {
-        expect(() => {
+    await t.test('It should throw an error if the output isnt a string', () => {
+        try {
             Converter.create({
                 file:   'test/OPW 733 Tienduizend redenen.pdf',
                 output: 42
             });
-        }).toThrowError('Output should be a string');
+        } catch (error) {
+            assert.strictEqual(error.message, 'Output should be a string');
+        }
     });
 
-    it('It should throw an error if the output folder doesnt exists', () => {
-        expect(() => {
+    await t.test('It should throw an error if the output folder doesnt exists', () => {
+        try {
             Converter.create({
                 file:   'test/OPW 733 Tienduizend redenen.pdf',
                 output: 'unknownfolder/'
             });
-        }).toThrowError('Output folder doesnt exists');
+        } catch (error) {
+            assert.strictEqual(error.message, 'Output folder doesnt exists');
+        }
     });
 
-    it('It should throw an error if the output folder doesnt exists', () => {
-        expect(() => {
+    await t.test('It should throw an error if the output folder doesnt exists', () => {
+       try {
             Converter.create({
                 file:   'test/OPW 733 Tienduizend redenen.pdf',
                 output: 'test/OPW 733 Tienduizend redenen.ppt'
             });
-        }).toThrowError('Output folder doesnt exists');
+        } catch (error) {
+            assert.strictEqual(error.message, 'Output folder doesnt exists');
+        }
     });
 
-    it('It should throw an error if the converter isnt a string', () => {
-        expect(() => {
+    await t.test('It should throw an error if the converter isnt a string', () => {
+       try {
             Converter.create({
                 file:            'test/OPW 733 Tienduizend redenen.pdf',
                 output:          'output/',
                 customConverter: 42
             });
-        }).toThrowError('Converter should be a string');
+        } catch (error) {
+            assert.strictEqual(error.message, 'Converter should be a string');
+        }
     });
 
-    it('It should throw an error if the density isnt a number', () => {
-        expect(() => {
+    await t.test('It should throw an error if the density isnt a number', () => {
+        try {
             Converter.create({
                 file:    'test/OPW 733 Tienduizend redenen.pdf',
                 output:  'output/',
                 density: '1'
             });
-        }).toThrowError('Density should be a valid density number');
+        } catch (error) {
+            assert.strictEqual(error.message, 'Density should be a valid density number');
+        }
     });
 
-    it('It should throw an error if the density is 10 or more', () => {
-        expect(() => {
+    await t.test('It should throw an error if the density is 10 or more', () => {
+        try {
             Converter.create({
                 file:    'test/OPW 733 Tienduizend redenen.pdf',
                 output:  'output/',
                 density: 9
             });
-        }).toThrowError('Density should be a valid density number');
+        } catch (error) {
+            assert.strictEqual(error.message, 'Density should be a valid density number');
+        }
     });
 
-    it('It should throw an error if the density is less than 1000', () => {
-        expect(() => {
+    await t.test('It should throw an error if the density is less than 1000', () => {
+        try {
             Converter.create({
                 file:    'test/OPW 733 Tienduizend redenen.pdf',
                 output:  'output/',
                 density: 1001
             });
-        }).toThrowError('Density should be a valid density number');
+        } catch (error) {
+            assert.strictEqual(error.message, 'Density should be a valid density number');
+        }
     });
 
-    it('It should throw an error if the quality isnt a number', () => {
-        expect(() => {
+    await t.test('It should throw an error if the quality isnt a number', () => {
+        try {
             Converter.create({
                 file:    'test/OPW 733 Tienduizend redenen.pdf',
                 output:  'output/',
                 quality: '1'
             });
-        }).toThrowError('Quality should be a valid quality number');
+        } catch (error) {
+            assert.strictEqual(error.message, 'Quality should be a valid quality number');
+        }
     });
 
-    it('It should throw an error if the quality is 1 or more', () => {
-        expect(() => {
+    await t.test('It should throw an error if the quality is 1 or more', () => {
+        try {
             Converter.create({
                 file:    'test/OPW 733 Tienduizend redenen.pdf',
                 output:  'output/',
                 quality: -1
             });
-        }).toThrowError('Quality should be a valid quality number');
+        } catch (error) {
+            assert.strictEqual(error.message, 'Quality should be a valid quality number');
+        }
     });
 
-    it('It should throw an error if the quality is less than 100', () => {
-        expect(() => {
+    await t.test('It should throw an error if the quality is less than 100', () => {
+        try {
             Converter.create({
                 file:    'test/OPW 733 Tienduizend redenen.pdf',
                 output:  'output/',
                 quality: 101
             });
-        }).toThrowError('Quality should be a valid quality number');
+        } catch (error) {
+            assert.strictEqual(error.message, 'Quality should be a valid quality number');
+        }
     });
 });
