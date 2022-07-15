@@ -1,9 +1,5 @@
-import {
-    platform
-} from 'process';
-import {
-    Converter
-} from '@hckrnews/converter';
+import { platform } from 'process';
+import { Converter } from '@hckrnews/converter';
 import Options from './options.js';
 
 /**
@@ -25,9 +21,9 @@ class PdfToPngConverter extends Converter {
      */
     get converter() {
         const converters = {
-            darwin:  this.converterForMac,
-            win32:   this.converterForWindows,
-            default: this.converterForLinux
+            darwin: this.converterForMac,
+            win32: this.converterForWindows,
+            default: this.converterForLinux,
         };
 
         if (this.customConverter) {
@@ -45,7 +41,7 @@ class PdfToPngConverter extends Converter {
      * Get the converter for Linux.
      *
      * todo:
-     * resize (convertOptions.push('-resize ' + options.width + (options.height ? 'X' + options.height : ''));)
+     * resize (convertOptions.push('-resize '+width+(height?'X'+height:''));)
      * background flatten
      * strip (profile)
      *
@@ -79,7 +75,7 @@ class PdfToPngConverter extends Converter {
      * @return {string}
      */
     get newFile() {
-        return this.output + this.oldFile.name + '.png';
+        return `${this.output + this.oldFile.name}.png`;
     }
 
     /**
@@ -110,22 +106,18 @@ class PdfToPngConverter extends Converter {
      *
      * @return {object}
      */
-    static create({
-        file,
-        output,
-        customConverter,
-        density,
-        quality
-    }) {
+    static create({ file, output, customConverter, density, quality }) {
         const converter = new PdfToPngConverter();
 
         converter.setFile(file);
         converter.setOutput(output);
         converter.setConverter(customConverter);
-        converter.setConvertString(Options.create({
-            density,
-            quality
-        }).convertString);
+        converter.setConvertString(
+            Options.create({
+                density,
+                quality,
+            }).convertString
+        );
 
         return converter;
     }
