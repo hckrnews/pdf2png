@@ -1,9 +1,5 @@
-import {
-    platform
-} from 'process';
-import {
-    Converter
-} from '@hckrnews/converter';
+import { platform } from 'process';
+import { Converter } from '@hckrnews/converter';
 import Options from './options.js';
 
 /**
@@ -15,7 +11,7 @@ class PdfToPngConverter extends Converter {
      */
     constructor() {
         super();
-        this.convertString = '';
+        this.options = null;
     }
 
     /**
@@ -25,9 +21,9 @@ class PdfToPngConverter extends Converter {
      */
     get converter() {
         const converters = {
-            darwin:  this.converterForMac,
-            win32:   this.converterForWindows,
-            default: this.converterForLinux
+            darwin: this.converterForMac,
+            win32: this.converterForWindows,
+            default: this.converterForLinux,
         };
 
         if (this.customConverter) {
@@ -42,10 +38,23 @@ class PdfToPngConverter extends Converter {
     }
 
     /**
+     * Get the convert string;
+     *
+     * @return {string}
+     */
+    get convertString() {
+        if (!this.options) {
+            return '';
+        }
+
+        return this.options.convertString;
+    }
+
+    /**
      * Get the converter for Linux.
      *
      * todo:
-     * resize (convertOptions.push('-resize ' + options.width + (options.height ? 'X' + options.height : ''));)
+     * resize (convertOptions.push('-resize '+width+(height?'X'+height:''));)
      * background flatten
      * strip (profile)
      *
@@ -79,24 +88,24 @@ class PdfToPngConverter extends Converter {
      * @return {string}
      */
     get newFile() {
-        return this.output + this.oldFile.name + '.png';
+        return `${this.output + this.oldFile.name}.png`;
     }
 
     /**
      * Set the convert string.
      *
-     * @param {string} convertString
+     * @param {object} options
      */
-    setConvertString(convertString) {
-        if (!convertString) {
+    setOptions(options) {
+        if (!options) {
             return;
         }
 
-        if (convertString.constructor !== String) {
-            throw new Error('The convert string should be a string');
+        if (!(options instanceof Options)) {
+            throw new Error('The options should be a options object');
         }
 
-        this.convertString = convertString;
+        this.options = options;
     }
 
     /**
@@ -105,30 +114,21 @@ class PdfToPngConverter extends Converter {
      * @param {string} file
      * @param {string} output
      * @param {string} customConverter
-     * @param {number} density
-     * @param {number} quality
+     * @param {object} options
      *
      * @return {object}
      */
-    static create({
-        file,
-        output,
-        customConverter,
-        density,
-        quality
-    }) {
+    static create({ file, output, customConverter, options }) {
         const converter = new PdfToPngConverter();
 
         converter.setFile(file);
         converter.setOutput(output);
         converter.setConverter(customConverter);
-        converter.setConvertString(Options.create({
-            density,
-            quality
-        }).convertString);
+        converter.setOptions(options);
 
         return converter;
     }
 }
 
 export default PdfToPngConverter;
+export { Options, PdfToPngConverter };

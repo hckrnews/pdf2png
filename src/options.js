@@ -1,4 +1,38 @@
 /**
+ * Check if char is hex.
+ *
+ * @param {string} char
+ *
+ * @return {boolean}
+ */
+function isHex(char) {
+    return (
+        char === '0' ||
+        char === '1' ||
+        char === '2' ||
+        char === '3' ||
+        char === '4' ||
+        char === '5' ||
+        char === '6' ||
+        char === '7' ||
+        char === '8' ||
+        char === '9' ||
+        char === 'a' ||
+        char === 'b' ||
+        char === 'c' ||
+        char === 'd' ||
+        char === 'e' ||
+        char === 'f' ||
+        char === 'A' ||
+        char === 'B' ||
+        char === 'C' ||
+        char === 'D' ||
+        char === 'E' ||
+        char === 'F'
+    );
+}
+
+/**
  * Process background color.
  *
  * @param {string} color
@@ -8,56 +42,82 @@
 function processBackgroundColor(color) {
     let newColor = color;
 
-    if (newColor.charAt(0) != '#') {
-        newColor = '#' + newColor;
+    if (newColor.charAt(0) !== '#') {
+        newColor = `#${newColor}`;
     }
 
-    if (newColor.length == 7) {
+    if (newColor.length === 7) {
         let validHex = true;
 
-        for (let i = 1; i < 7; i++) {
+        for (let i = 1; i < 7; i += 1) {
             if (!isHex(newColor.charAt(i))) {
                 validHex = false;
                 break;
             }
         }
         if (validHex) {
-            return '"' + newColor + '"';
+            return `"${newColor}"`;
         }
     }
+
+    return '';
 }
 
-/**
- * Check if char is hex.
- *
- * @param {string} char
- *
- * @return {boolean}
- */
-function isHex(char) {
-    return char == '0' ||
-        char == '1' ||
-        char == '2' ||
-        char == '3' ||
-        char == '4' ||
-        char == '5' ||
-        char == '6' ||
-        char == '7' ||
-        char == '8' ||
-        char == '9' ||
-        char == 'a' ||
-        char == 'b' ||
-        char == 'c' ||
-        char == 'd' ||
-        char == 'e' ||
-        char == 'f' ||
-        char == 'A' ||
-        char == 'B' ||
-        char == 'C' ||
-        char == 'D' ||
-        char == 'E' ||
-        char == 'F';
-}
+const channels = [
+    'Red',
+    'Green',
+    'Blue',
+    'Alpha',
+    'Gray',
+    'Cyan',
+    'Magenta',
+    'Yellow',
+    'Black',
+    'Opacity',
+    'Index',
+    'RGB',
+    'RGBA',
+    'CMYK',
+    'CMYKA',
+];
+
+const colorspaces = [
+    'CMY',
+    'CMYK',
+    'Gray',
+    'LinearGray',
+    'Rec709Luma',
+    'HCL',
+    'HCLp',
+    'HSB',
+    'HSI',
+    'HSL',
+    'HSV',
+    'HWB',
+    'Jzazbz',
+    'Lab',
+    'LCHab',
+    'LCHuv',
+    'LMS',
+    'Log',
+    'Luv',
+    'OHTA',
+    'Rec601YCbCr',
+    'Rec709YCbCr',
+    'RGB',
+    'scRGB',
+    'sRGB',
+    'Transparent',
+    'xyY',
+    'XYZ',
+    'YCbCr',
+    'YCC',
+    'YDbDr',
+    'YIQ',
+    'YPbPr',
+    'YUV',
+    'Undefined',
+];
 
 /**
  * Options model.
@@ -69,9 +129,13 @@ class Options {
     constructor() {
         this.quality = 90;
         this.density = 96;
-        this.width;
-        this.height;
+        this.width = undefined;
+        this.height = undefined;
         this.background = '"#FFFFFF"';
+        this.transparent = undefined;
+        this.invert = undefined;
+        this.channel = undefined;
+        this.colorspace = undefined;
     }
 
     /**
@@ -160,6 +224,91 @@ class Options {
     }
 
     /**
+     * Set the transparant.
+     *
+     * @param {number} transparant
+     */
+    setTransparant(transparant) {
+        if (!transparant) {
+            return;
+        }
+
+        if (transparant.constructor !== String) {
+            throw new Error('Transparant should be a string');
+        }
+
+        this.transparant = processBackgroundColor(transparant);
+    }
+
+    /**
+     * Set the invert
+     *
+     * @param {boolean} invert
+     */
+    setInvert(invert) {
+        if (!invert) {
+            return;
+        }
+
+        if (invert.constructor !== Boolean) {
+            return;
+        }
+
+        this.invert = invert;
+    }
+
+    /**
+     * Set the channel
+     *
+     * @param {string} channel
+     */
+    setChannel(channel) {
+        if (!channel || channel.constructor !== String) {
+            return;
+        }
+
+        if (!channels.includes(channel)) {
+            throw new Error('Unknow channel');
+        }
+
+        this.channel = channel;
+    }
+
+    /**
+     * Set the colorspace
+     *
+     * @param {string} colorspace
+     */
+    setColorspace(colorspace) {
+        if (!colorspace || colorspace.constructor !== String) {
+            return;
+        }
+
+        if (!colorspaces.includes(colorspace)) {
+            throw new Error('Unknow colorspace');
+        }
+
+        this.colorspace = colorspace;
+    }
+
+    /**
+     * Get the resize by width and height.
+     *
+     * @return {string}
+     */
+    get resize() {
+        if (!this.width) {
+            return undefined;
+        }
+
+        if (this.height) {
+            return `${this.width}X${this.height}`;
+        }
+
+        return this.width;
+    }
+
+    /**
      * Get all options.
      *
      * @return {array}
@@ -167,26 +316,42 @@ class Options {
     get options() {
         return [
             {
-                key:   'quality',
-                value: this.quality
+                key: 'quality',
+                value: this.quality,
             },
             {
-                key:   'density',
-                value: this.density
+                key: 'density',
+                value: this.density,
             },
             {
-                key:   'width',
-                value: this.width
+                key: 'resize',
+                value: this.resize,
             },
             {
-                key:   'height',
-                value: this.height
+                key: 'height',
+                value: this.height,
             },
             {
-                key:   'background',
-                value: this.background
-            }
-        ].filter(option => option.value);
+                key: 'background',
+                value: this.background,
+            },
+            {
+                key: 'transparent',
+                value: this.transparent,
+            },
+            {
+                key: 'negate',
+                value: this.invert === true ? null : undefined,
+            },
+            {
+                key: 'channel',
+                value: this.channel ? `"${this.channel}"` : undefined,
+            },
+            {
+                key: 'colorspace',
+                value: this.colorspace,
+            },
+        ].filter((option) => option.value !== undefined);
     }
 
     /**
@@ -195,10 +360,13 @@ class Options {
      * @return {string}
      */
     get convertString() {
-        return this.options.reduce(
-            (accumulator, currentValue) => accumulator + ' -' + currentValue.key + ' ' + currentValue.value,
-            ''
-        );
+        return this.options.reduce((accumulator, currentValue) => {
+            if (currentValue.value === null) {
+                return `${accumulator} -${currentValue.key}`;
+            }
+
+            return `${accumulator} -${currentValue.key} ${currentValue.value}`;
+        }, '');
     }
 
     /**
@@ -209,11 +377,23 @@ class Options {
      * @param {number} width
      * @param {number} height
      * @param {string} background
+     * @param {string} transparant
+     * @param {boolean} invert
+     * @param {string} channel
+     * @param {string} colorspace
      *
      * @return {object}
      */
     static create({
-        density, quality, width, height, background
+        density,
+        quality,
+        width,
+        height,
+        background,
+        transparant,
+        invert,
+        channel,
+        colorspace,
     }) {
         const options = new Options();
 
@@ -222,6 +402,10 @@ class Options {
         options.setWidth(width);
         options.setWidth(height);
         options.setBackground(background);
+        options.setTransparant(transparant);
+        options.setInvert(invert);
+        options.setChannel(channel);
+        options.setColorspace(colorspace);
 
         return options;
     }
