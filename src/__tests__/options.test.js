@@ -1,3 +1,5 @@
+import test from 'node:test';
+import assert from 'assert';
 import Options from '../options.js';
 
 const expectTestCases = [
@@ -22,13 +24,17 @@ const expectTestCases = [
     }
 ];
 
-describe.each(expectTestCases)(
-    'FS helper test',
-    ({
-        description, input, expected
-    }) => {
-        it(description, () => {
-            expect(Options.create(input).convertString).toBe(expected);
-        });
-    }
-);
+test('FS helper test', async (t) => {
+    await Promise.all(
+        expectTestCases.map(
+            async ({
+                description, input, expected
+            }) => {
+                await t.test(description, () => {
+
+                    assert.strictEqual(Options.create(input).convertString, expected);
+                });
+            }
+        )
+    );
+});
