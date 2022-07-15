@@ -15,24 +15,24 @@
     "check-coverage": true,
     "watermarks": {
         "lines": [
-            75,
+            70,
             90
         ],
         "functions": [
-            75,
+            70,
             90
         ],
         "branches": [
-            75,
+            70,
             90
         ],
         "statements": [
-            75,
+            70,
             90
         ]
     },
-    "branches": 75,
-    "lines": 75,
-    "functions": 75,
-    "statements": 75
+    "branches": 70,
+    "lines": 90,
+    "functions": 90,
+    "statements": 90
 }

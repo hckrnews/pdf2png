@@ -25,7 +25,7 @@ const expectTestCases = [
     {
         description: 'Set density to 10',
         input:       {
-            density: 10, quality: 70, width: 200, height: 100, background: '#336699'
+            density: 10, quality: 70, width: 200, height: 100, background: '336699'
         },
         expected: ' -quality 70 -density 10 -width 200 -height 100 -background "#336699"'
     }
