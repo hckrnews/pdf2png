@@ -14,6 +14,8 @@ jobs:
       with:
         node-version: 20
         cache: 'npm'
+    - name: Update APT
+      run: sudo apt update
     - name: Install imagemagick
       run: sudo apt install imagemagick ghostscript
     - name: Change ImageMagick policy to allow pdf->png conversion.
