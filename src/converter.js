@@ -113,7 +113,7 @@ class PdfToPngConverter extends Converter {
         customConverter,
         density,
         quality,
-        sync = false,
+        sync = true,
     }) {
         const converter = new PdfToPngConverter();
 
