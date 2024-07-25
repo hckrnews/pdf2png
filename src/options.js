@@ -1,9 +1,7 @@
 /**
  * Check if char is hex.
- *
  * @param {string} char
- *
- * @return {boolean}
+ * @returns {boolean}
  */
 function isHex(char) {
     return (
@@ -34,10 +32,8 @@ function isHex(char) {
 
 /**
  * Process background color.
- *
  * @param {string} color
- *
- * @return {string}
+ * @returns {string}
  */
 function processBackgroundColor(color) {
     let newColor = color;
@@ -80,7 +76,6 @@ class Options {
 
     /**
      * Set the density.
-     *
      * @param {number} density
      */
     setDensity(density) {
@@ -97,7 +92,6 @@ class Options {
 
     /**
      * Set the quality.
-     *
      * @param {number} quality
      */
     setQuality(quality) {
@@ -114,7 +108,6 @@ class Options {
 
     /**
      * Set the width.
-     *
      * @param {number} width
      */
     setWidth(width) {
@@ -131,7 +124,6 @@ class Options {
 
     /**
      * Set the height.
-     *
      * @param {number} height
      */
     setHeight(height) {
@@ -148,8 +140,7 @@ class Options {
 
     /**
      * Set the background.
-     *
-     * @param {number} background
+     * @param {string} background
      */
     setBackground(background) {
         if (!background) {
@@ -165,8 +156,7 @@ class Options {
 
     /**
      * Get all options.
-     *
-     * @return {array}
+     * @returns {{key: string, value: any}[]}
      */
     get options() {
         return [
@@ -195,8 +185,7 @@ class Options {
 
     /**
      * Get the convert string.
-     *
-     * @return {string}
+     * @returns {string}
      */
     get convertString() {
         return this.options.reduce(
@@ -208,14 +197,13 @@ class Options {
 
     /**
      * Create the options.
-     *
-     * @param {number} density
-     * @param {number} quality
-     * @param {number} width
-     * @param {number} height
-     * @param {string} background
-     *
-     * @return {object}
+     * @param {object} params
+     * @param {number=} params.density
+     * @param {number=} params.quality
+     * @param {number=} params.width
+     * @param {number=} params.height
+     * @param {string=} params.background
+     * @returns {Options}
      */
     static create({ density, quality, width, height, background }) {
         const options = new Options();

@@ -3,6 +3,13 @@ import { Converter } from '@hckrnews/converter';
 import Options from './options.js';
 
 /**
+ * @typedef {import('@hckrnews/converter').Converter} ConverterObject
+ * @typedef {object} Pdf2PngConverterSpecificObject
+ * @property {string} converterForLinux
+ * @typedef {ConverterObject & Pdf2PngConverterSpecificObject} Pdf2PngConverterObject
+ */
+
+/**
  * Converter
  */
 class PdfToPngConverter extends Converter {
@@ -16,8 +23,7 @@ class PdfToPngConverter extends Converter {
 
     /**
      * Get the converter.
-     *
-     * @return {string}
+     * @returns {string}
      */
     get converter() {
         const converters = {
@@ -44,8 +50,7 @@ class PdfToPngConverter extends Converter {
      * resize (convertOptions.push('-resize '+width+(height?'X'+height:''));)
      * background flatten
      * strip (profile)
-     *
-     * @return {string}
+     * @returns {string}
      */
     get converterForLinux() {
         return `convert ${this.convertString} -colorspace RGB`;
@@ -53,8 +58,7 @@ class PdfToPngConverter extends Converter {
 
     /**
      * Get the converter for Mac.
-     *
-     * @return {string}
+     * @returns {string}
      */
     get converterForMac() {
         return `convert ${this.convertString} -colorspace RGB`;
@@ -62,8 +66,7 @@ class PdfToPngConverter extends Converter {
 
     /**
      * Get the converter for Mac.
-     *
-     * @return {strring}
+     * @returns {string}
      */
     get converterForWindows() {
         return `magick.exe ${this.convertString} -colorspace RGB`;
@@ -71,8 +74,7 @@ class PdfToPngConverter extends Converter {
 
     /**
      * Get the path of the new file.
-     *
-     * @return {string}
+     * @returns {string}
      */
     get newFile() {
         return `${this.output + this.oldFile.name}.png`;
@@ -80,7 +82,6 @@ class PdfToPngConverter extends Converter {
 
     /**
      * Set the convert string.
-     *
      * @param {string} convertString
      */
     setConvertString(convertString) {
@@ -97,18 +98,26 @@ class PdfToPngConverter extends Converter {
 
     /**
      * Create the converter
-     *
-     * @param {string} file
-     * @param {string} output
-     * @param {string} customConverter
-     * @param {number} density
-     * @param {number} quality
-     *
-     * @return {object}
+     * @param {object} params
+     * @param {string} params.file
+     * @param {string} params.output
+     * @param {string=} params.customConverter
+     * @param {number=} params.density
+     * @param {number=} params.quality
+     * @param {boolean=} params.sync
+     * @returns {Pdf2PngConverterObject}
      */
-    static create({ file, output, customConverter, density, quality }) {
+    static create({
+        file,
+        output,
+        customConverter,
+        density,
+        quality,
+        sync = true,
+    }) {
         const converter = new PdfToPngConverter();
 
+        converter.setSync(sync);
         converter.setFile(file);
         converter.setOutput(output);
         converter.setConverter(customConverter);
