@@ -1,33 +1,34 @@
+/* eslint-disable complexity */
 /**
  * Check if char is hex.
  * @param {string} char
  * @returns {boolean}
  */
-function isHex(char) {
-    return (
-        char === '0' ||
-        char === '1' ||
-        char === '2' ||
-        char === '3' ||
-        char === '4' ||
-        char === '5' ||
-        char === '6' ||
-        char === '7' ||
-        char === '8' ||
-        char === '9' ||
-        char === 'a' ||
-        char === 'b' ||
-        char === 'c' ||
-        char === 'd' ||
-        char === 'e' ||
-        char === 'f' ||
-        char === 'A' ||
-        char === 'B' ||
-        char === 'C' ||
-        char === 'D' ||
-        char === 'E' ||
-        char === 'F'
-    );
+function isHex (char) {
+  return (
+    char === '0'
+    || char === '1'
+    || char === '2'
+    || char === '3'
+    || char === '4'
+    || char === '5'
+    || char === '6'
+    || char === '7'
+    || char === '8'
+    || char === '9'
+    || char === 'a'
+    || char === 'b'
+    || char === 'c'
+    || char === 'd'
+    || char === 'e'
+    || char === 'f'
+    || char === 'A'
+    || char === 'B'
+    || char === 'C'
+    || char === 'D'
+    || char === 'E'
+    || char === 'F'
+  )
 }
 
 /**
@@ -35,187 +36,187 @@ function isHex(char) {
  * @param {string} color
  * @returns {string}
  */
-function processBackgroundColor(color) {
-    let newColor = color;
+function processBackgroundColor (color) {
+  let newColor = color
 
-    if (newColor.charAt(0) !== '#') {
-        newColor = `#${newColor}`;
+  if (newColor.charAt(0) !== '#') {
+    newColor = `#${newColor}`
+  }
+
+  if (newColor.length === 7) {
+    let validHex = true
+
+    for (let i = 1; i < 7; i += 1) {
+      if (!isHex(newColor.charAt(i))) {
+        validHex = false
+        break
+      }
     }
-
-    if (newColor.length === 7) {
-        let validHex = true;
-
-        for (let i = 1; i < 7; i += 1) {
-            if (!isHex(newColor.charAt(i))) {
-                validHex = false;
-                break;
-            }
-        }
-        if (validHex) {
-            return `"${newColor}"`;
-        }
+    if (validHex) {
+      return `"${newColor}"`
     }
+  }
 
-    return undefined;
+  return undefined
 }
 
 /**
  * Options model.
  */
 class Options {
-    /**
-     * Define all options.
-     */
-    constructor() {
-        this.quality = 90;
-        this.density = 96;
-        this.width = undefined;
-        this.height = undefined;
-        this.background = '"#FFFFFF"';
+  /**
+   * Define all options.
+   */
+  constructor () {
+    this.quality = 90
+    this.density = 96
+    this.width = undefined
+    this.height = undefined
+    this.background = '"#FFFFFF"'
+  }
+
+  /**
+   * Set the density.
+   * @param {number} density
+   */
+  setDensity (density) {
+    if (!density) {
+      return
     }
 
-    /**
-     * Set the density.
-     * @param {number} density
-     */
-    setDensity(density) {
-        if (!density) {
-            return;
-        }
-
-        if (density.constructor !== Number || density < 10 || density > 1000) {
-            throw new Error('Density should be a valid density number');
-        }
-
-        this.density = density;
+    if (density.constructor !== Number || density < 10 || density > 1000) {
+      throw new Error('Density should be a valid density number')
     }
 
-    /**
-     * Set the quality.
-     * @param {number} quality
-     */
-    setQuality(quality) {
-        if (!quality) {
-            return;
-        }
+    this.density = density
+  }
 
-        if (quality.constructor !== Number || quality < 1 || quality > 100) {
-            throw new Error('Quality should be a valid quality number');
-        }
-
-        this.quality = quality;
+  /**
+   * Set the quality.
+   * @param {number} quality
+   */
+  setQuality (quality) {
+    if (!quality) {
+      return
     }
 
-    /**
-     * Set the width.
-     * @param {number} width
-     */
-    setWidth(width) {
-        if (!width) {
-            return;
-        }
-
-        if (width.constructor !== Number || width < 1 || width > 10000) {
-            throw new Error('Width should be a valid width number');
-        }
-
-        this.width = width;
+    if (quality.constructor !== Number || quality < 1 || quality > 100) {
+      throw new Error('Quality should be a valid quality number')
     }
 
-    /**
-     * Set the height.
-     * @param {number} height
-     */
-    setHeight(height) {
-        if (!height) {
-            return;
-        }
+    this.quality = quality
+  }
 
-        if (height.constructor !== Number || height < 1 || height > 10000) {
-            throw new Error('Height should be a valid height number');
-        }
-
-        this.height = height;
+  /**
+   * Set the width.
+   * @param {number} width
+   */
+  setWidth (width) {
+    if (!width) {
+      return
     }
 
-    /**
-     * Set the background.
-     * @param {string} background
-     */
-    setBackground(background) {
-        if (!background) {
-            return;
-        }
-
-        if (background.constructor !== String) {
-            throw new Error('Background should be a string');
-        }
-
-        this.background = processBackgroundColor(background);
+    if (width.constructor !== Number || width < 1 || width > 10000) {
+      throw new Error('Width should be a valid width number')
     }
 
-    /**
-     * Get all options.
-     * @returns {{key: string, value: any}[]}
-     */
-    get options() {
-        return [
-            {
-                key: 'quality',
-                value: this.quality,
-            },
-            {
-                key: 'density',
-                value: this.density,
-            },
-            {
-                key: 'width',
-                value: this.width,
-            },
-            {
-                key: 'height',
-                value: this.height,
-            },
-            {
-                key: 'background',
-                value: this.background,
-            },
-        ].filter((option) => option.value);
+    this.width = width
+  }
+
+  /**
+   * Set the height.
+   * @param {number} height
+   */
+  setHeight (height) {
+    if (!height) {
+      return
     }
 
-    /**
-     * Get the convert string.
-     * @returns {string}
-     */
-    get convertString() {
-        return this.options.reduce(
-            (accumulator, currentValue) =>
-                `${accumulator} -${currentValue.key} ${currentValue.value}`,
-            ''
-        );
+    if (height.constructor !== Number || height < 1 || height > 10000) {
+      throw new Error('Height should be a valid height number')
     }
 
-    /**
-     * Create the options.
-     * @param {object} params
-     * @param {number=} params.density
-     * @param {number=} params.quality
-     * @param {number=} params.width
-     * @param {number=} params.height
-     * @param {string=} params.background
-     * @returns {Options}
-     */
-    static create({ density, quality, width, height, background }) {
-        const options = new Options();
+    this.height = height
+  }
 
-        options.setDensity(density);
-        options.setQuality(quality);
-        options.setWidth(width);
-        options.setHeight(height);
-        options.setBackground(background);
-
-        return options;
+  /**
+   * Set the background.
+   * @param {string} background
+   */
+  setBackground (background) {
+    if (!background) {
+      return
     }
+
+    if (background.constructor !== String) {
+      throw new Error('Background should be a string')
+    }
+
+    this.background = processBackgroundColor(background)
+  }
+
+  /**
+   * Get all options.
+   * @returns {{key: string, value: any}[]}
+   */
+  get options () {
+    return [
+      {
+        key: 'quality',
+        value: this.quality
+      },
+      {
+        key: 'density',
+        value: this.density
+      },
+      {
+        key: 'width',
+        value: this.width
+      },
+      {
+        key: 'height',
+        value: this.height
+      },
+      {
+        key: 'background',
+        value: this.background
+      }
+    ].filter((option) => option.value)
+  }
+
+  /**
+   * Get the convert string.
+   * @returns {string}
+   */
+  get convertString () {
+    return this.options.reduce(
+      (accumulator, currentValue) =>
+        `${accumulator} -${currentValue.key} ${currentValue.value}`,
+      ''
+    )
+  }
+
+  /**
+   * Create the options.
+   * @param {object} params
+   * @param {number=} params.density
+   * @param {number=} params.quality
+   * @param {number=} params.width
+   * @param {number=} params.height
+   * @param {string=} params.background
+   * @returns {Options}
+   */
+  static create ({ density, quality, width, height, background }) {
+    const options = new Options()
+
+    options.setDensity(density)
+    options.setQuality(quality)
+    options.setWidth(width)
+    options.setHeight(height)
+    options.setBackground(background)
+
+    return options
+  }
 }
 
-export default Options;
+export default Options
