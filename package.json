@@ -1,6 +1,6 @@
 {
     "name": "@hckrnews/pdf2png",
-    "version": "0.4.0",
+    "version": "0.5.0",
     "description": "Convert pdf to images (png,jpg)",
     "files": [
         "src/converter.js",
