@@ -53,7 +53,7 @@ function processBackgroundColor (color) {
       }
     }
     if (validHex) {
-      return `"${newColor}"`
+      return newColor
     }
   }
 
@@ -72,7 +72,7 @@ class Options {
     this.density = 96
     this.width = undefined
     this.height = undefined
-    this.background = '"#FFFFFF"'
+    this.background = '#FFFFFF'
   }
 
   /**
@@ -185,15 +185,11 @@ class Options {
   }
 
   /**
-   * Get the convert string.
-   * @returns {string}
+   * Get the convert arguments.
+   * @returns {string[]}
    */
-  get convertString () {
-    return this.options.reduce(
-      (accumulator, currentValue) =>
-        `${accumulator} -${currentValue.key} ${currentValue.value}`,
-      ''
-    )
+  get convertArgs () {
+    return this.options.flatMap(({ key, value }) => [`-${key}`, String(value)])
   }
 
   /**

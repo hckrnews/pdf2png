@@ -1,8 +1,63 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import test from 'node:test'
 import assert from 'node:assert'
+import { copyFileSync, mkdirSync, mkdtempSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import path from 'node:path'
 import { fileExists } from '@hckrnews/converter'
 import Converter from '../converter.js'
+
+test('PDF2PNG command injection', async (t) => {
+  const dir = mkdtempSync(path.join(tmpdir(), 'pdf2png-'))
+  const marker = path.join(dir, 'PWNED')
+  t.after(() => rmSync(dir, { recursive: true, force: true }))
+
+  await t.test('It should not execute a filename or output directory payload', () => {
+    const name = '$(touch PWNED)`touch PWNED`";touch PWNED #'
+    const file = path.join(dir, `${name}.pdf`)
+    const output = `${path.join(dir, '$(touch PWNED)')}/`
+    copyFileSync('test/OPW 733 Tienduizend redenen.pdf', file)
+    mkdirSync(output)
+
+    const cwd = process.cwd()
+    process.chdir(dir)
+    try {
+      Converter.create({ file, output }).convert()
+    } finally {
+      process.chdir(cwd)
+    }
+
+    assert.strictEqual(fileExists(marker), false)
+    assert.strictEqual(fileExists(path.join(output, `${name}-0.png`)), true)
+  })
+
+  await t.test('It should not chain a customConverter payload', () => {
+    const converter = Converter.create({
+      file: 'test/OPW 733 Tienduizend redenen.pdf',
+      output: 'output/',
+      customConverter: `echo && touch ${marker}`
+    })
+
+    assert.throws(() => converter.convert())
+    assert.strictEqual(fileExists(marker), false)
+  })
+
+  await t.test('It should pass the options and absolute paths as arguments', () => {
+    const converter = Converter.create({
+      file: 'test/OPW 733 Tienduizend redenen.pdf',
+      output: 'output/',
+      quality: 60,
+      density: 72
+    })
+
+    assert.deepStrictEqual(converter.args, [
+      '-quality', '60', '-density', '72', '-background', '#FFFFFF',
+      '-colorspace', 'RGB',
+      path.resolve('test/OPW 733 Tienduizend redenen.pdf'),
+      path.resolve('output/OPW 733 Tienduizend redenen.png')
+    ])
+  })
+})
 
 test('PPT2PDF converter test', async (t) => {
   await t.test('It should generate the converter', () => {
@@ -37,7 +92,7 @@ test('PPT2PDF converter test', async (t) => {
     const converter = Converter.create({
       file: 'test/OPW 733 Tienduizend redenen.pdf',
       output: 'output/',
-      customConverter: 'convert -density 96 -quality 90 -colorspace RGB'
+      customConverter: 'convert'
     })
 
     converter.convert()
@@ -51,9 +106,7 @@ test('PPT2PDF converter test', async (t) => {
   await t.test('It should return the default converter', () => {
     const converter = Converter.create({
       file: 'test/OPW 733 Tienduizend redenen.pdf',
-      output: 'output/',
-      customConverter:
-                'convert  -quality 90 -density 96 -background "#FFFFFF" -colorspace RGB'
+      output: 'output/'
     })
 
     const result = converter.converter

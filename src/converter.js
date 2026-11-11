@@ -1,3 +1,4 @@
+import path from 'node:path'
 import { platform } from 'node:process'
 import { Converter } from '@hckrnews/converter'
 import Options from './options.js'
@@ -18,7 +19,7 @@ class PdfToPngConverter extends Converter {
    */
   constructor () {
     super()
-    this.convertString = ''
+    this.convertArgs = []
   }
 
   /**
@@ -44,32 +45,41 @@ class PdfToPngConverter extends Converter {
   }
 
   /**
-   * Get the converter for Linux.
-   *
-   * todo:
-   * resize (convertOptions.push('-resize '+width+(height?'X'+height:''));)
-   * background flatten
-   * strip (profile)
+   * Get the converter binary for Linux.
    * @returns {string}
    */
   get converterForLinux () {
-    return `convert ${this.convertString} -colorspace RGB`
+    return 'convert'
   }
 
   /**
-   * Get the converter for Mac.
+   * Get the converter binary for Mac.
    * @returns {string}
    */
   get converterForMac () {
-    return `convert ${this.convertString} -colorspace RGB`
+    return 'convert'
   }
 
   /**
-   * Get the converter for Mac.
+   * Get the converter binary for Windows.
    * @returns {string}
    */
   get converterForWindows () {
-    return `magick.exe ${this.convertString} -colorspace RGB`
+    return 'magick.exe'
+  }
+
+  /**
+   * Get the arguments passed to the converter binary.
+   * @returns {string[]}
+   */
+  get args () {
+    return [
+      ...this.convertArgs,
+      '-colorspace',
+      'RGB',
+      path.resolve(this.oldFile.path),
+      path.resolve(this.newFile)
+    ]
   }
 
   /**
@@ -81,19 +91,15 @@ class PdfToPngConverter extends Converter {
   }
 
   /**
-   * Set the convert string.
-   * @param {string} convertString
+   * Set the convert arguments.
+   * @param {string[]} convertArgs
    */
-  setConvertString (convertString) {
-    if (!convertString) {
-      return
+  setConvertArgs (convertArgs) {
+    if (!Array.isArray(convertArgs) || !convertArgs.every((arg) => typeof arg === 'string')) {
+      throw new Error('The convert arguments should be an array of strings')
     }
 
-    if (convertString.constructor !== String) {
-      throw new Error('The convert string should be a string')
-    }
-
-    this.convertString = convertString
+    this.convertArgs = convertArgs
   }
 
   /**
@@ -121,11 +127,11 @@ class PdfToPngConverter extends Converter {
     converter.setFile(file)
     converter.setOutput(output)
     converter.setConverter(customConverter)
-    converter.setConvertString(
+    converter.setConvertArgs(
       Options.create({
         density,
         quality
-      }).convertString
+      }).convertArgs
     )
 
     return converter

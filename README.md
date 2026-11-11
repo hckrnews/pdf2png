@@ -37,7 +37,7 @@ files: Array with the files.
 
 output: Output folder.
 
-customConverter: set a custom converter
+customConverter: name of the ImageMagick binary to run instead of the default (`convert`, or `magick.exe` on Windows). It is executed without a shell, so it must not contain flags or shell syntax.
 
 
 ## Test the package.
